@@ -1,0 +1,25 @@
+🚗 Volkswagen Server running on port 5000
+✅ MongoDB Connected: ac-bkhy1q9-shard-00-01.iph0jiq.mongodb.net
+AI Assistant Error: GoogleGenerativeAIFetchError: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [400 Bad Request] API key not valid. Please pass a valid API key. [{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"API_KEY_INVALID","domain":"googleapis.com","metadata":{"service":"generativelanguage.googleapis.com"}},{"@type":"type.googleapis.com/google.rpc.LocalizedMessage","locale":"en-US","message":"API key not valid. Please pass a valid API key."}]
+    at handleResponseNotOk (file:///Users/sachin8935/Desktop/WebDev/volkswagen_ecommerce/server/node_modules/@google/generative-ai/dist/index.mjs:432:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async makeRequest (file:///Users/sachin8935/Desktop/WebDev/volkswagen_ecommerce/server/node_modules/@google/generative-ai/dist/index.mjs:401:9)
+    at async generateContent (file:///Users/sachin8935/Desktop/WebDev/volkswagen_ecommerce/server/node_modules/@google/generative-ai/dist/index.mjs:865:22)
+    at async ChatSession.sendMessage (file:///Users/sachin8935/Desktop/WebDev/volkswagen_ecommerce/server/node_modules/@google/generative-ai/dist/index.mjs:1208:9)
+    at async file:///Users/sachin8935/Desktop/WebDev/volkswagen_ecommerce/server/routes/ai.js:82:20 {
+  status: 400,
+  statusText: 'Bad Request',
+  errorDetails: [
+    {
+      '@type': 'type.googleapis.com/google.rpc.ErrorInfo',
+      reason: 'API_KEY_INVALID',
+      domain: 'googleapis.com',
+      metadata: [Object]
+    },
+    {
+      '@type': 'type.googleapis.com/google.rpc.LocalizedMessage',
+      locale: 'en-US',
+      message: 'API key not valid. Please pass a valid API key.'
+    }
+  ]
+}
