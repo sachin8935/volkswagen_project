@@ -356,7 +356,7 @@ export default function CheckoutPage() {
                           type="text"
                           name="firstName"
                           className={`input-field ${errors.firstName ? 'border-red-500' : ''}`}
-                          placeholder="John"
+                          placeholder="Sachin"
                           value={formData.firstName}
                           onChange={handleInputChange}
                         />
@@ -368,7 +368,7 @@ export default function CheckoutPage() {
                           type="text"
                           name="lastName"
                           className={`input-field ${errors.lastName ? 'border-red-500' : ''}`}
-                          placeholder="Doe"
+                          placeholder="Kumar"
                           value={formData.lastName}
                           onChange={handleInputChange}
                         />
@@ -517,7 +517,7 @@ export default function CheckoutPage() {
                         type="text"
                         name="cardName"
                         className={`input-field uppercase ${errors.cardName ? 'border-red-500' : ''}`}
-                        placeholder="JOHN DOE"
+                        placeholder="Sachin Kumar"
                         value={formData.cardName}
                         onChange={handleInputChange}
                       />

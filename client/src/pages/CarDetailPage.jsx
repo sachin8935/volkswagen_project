@@ -719,7 +719,7 @@ const CarDetailPage = () => {
                             value={testDriveData.name}
                             onChange={(e) => setTestDriveData({ ...testDriveData, name: e.target.value })}
                             className="w-full pl-12 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-blue-500 focus:outline-none"
-                            placeholder="John Doe"
+                            placeholder="Sachin Kumar"
                             required
                           />
                         </div>
