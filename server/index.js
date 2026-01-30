@@ -1,8 +1,10 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import path from 'path';
 
 import connectDB from './config/db.js';
+
 import carsRouter from './routes/cars.js';
 import partsRouter from './routes/parts.js';
 import servicesRouter from './routes/services.js';
@@ -13,41 +15,77 @@ import adminRouter from './routes/admin.js';
 import trackingRouter from './routes/tracking.js';
 import aiRouter from './routes/ai.js';
 
-// Connect to MongoDB
-connectDB();
-
 const app = express();
+
+/* =========================
+   ENV & CORE CONFIG
+========================= */
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors({
-  origin: function(origin, callback) {
-    // Allow requests with no origin (mobile apps, curl, etc.)
-    if (!origin) return callback(null, true);
-    
-    const allowedOrigins = [
-      'http://localhost:5173',
-      'http://localhost:5174', 
-      'http://localhost:5175',
-      process.env.CLIENT_URL,
-      // Add your Render frontend URL patterns
-    ].filter(Boolean);
-    
-    // Allow any Render or Vercel deployed frontend
-    if (allowedOrigins.includes(origin) || 
-        origin.endsWith('.onrender.com') || 
-        origin.endsWith('.vercel.app')) {
-      return callback(null, true);
-    }
-    
-    callback(null, true); // Allow all origins for now (you can restrict later)
-  },
-  credentials: true
-}));
+/* =========================
+   TRUST PROXY (IMPORTANT)
+========================= */
+app.set('trust proxy', true);
+
+/* =========================
+   DATABASE
+========================= */
+connectDB();
+
+/* =========================
+   MIDDLEWARE
+========================= */
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow server-to-server, curl, Postman
+      if (!origin) return callback(null, true);
+
+      const allowedOrigins = [
+        'http://localhost:5173',
+        'http://localhost:5174',
+        'http://localhost:5175',
+        process.env.CLIENT_URL,
+      ].filter(Boolean);
+
+      if (
+        allowedOrigins.includes(origin) ||
+        origin.endsWith('.onrender.com') ||
+        origin.endsWith('.vercel.app')
+      ) {
+        return callback(null, true);
+      }
+
+      // Safe fallback (tighten later)
+      return callback(null, true);
+    },
+    credentials: true,
+  })
+);
+
+/* =========================
+   STATIC FILES
+========================= */
 app.use('/uploads', express.static('uploads'));
 
-// Routes
+/* =========================
+   HEALTH CHECK (NO DB DEPENDENCY)
+========================= */
+app.get('/api/health', (req, res) => {
+  res.status(200).json({
+    status: 'OK',
+    service: 'Volkswagen API',
+    uptime: process.uptime(),
+    timestamp: new Date(),
+  });
+});
+
+/* =========================
+   API ROUTES
+========================= */
 app.use('/api/cars', carsRouter);
 app.use('/api/parts', partsRouter);
 app.use('/api/services', servicesRouter);
@@ -58,11 +96,24 @@ app.use('/api/admin', adminRouter);
 app.use('/api/tracking', trackingRouter);
 app.use('/api/ai', aiRouter);
 
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', message: 'Volkswagen API is running' });
+/* =========================
+   404 HANDLER
+========================= */
+app.use((req, res) => {
+  res.status(404).json({ message: 'Route not found' });
 });
 
-app.listen(PORT, () => {
+/* =========================
+   GLOBAL ERROR HANDLER
+========================= */
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: 'Internal Server Error' });
+});
+
+/* =========================
+   SERVER LISTEN (CRITICAL FIX)
+========================= */
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚗 Volkswagen Server running on port ${PORT}`);
 });
