@@ -7,6 +7,8 @@ import {
   Mail, FileText, ExternalLink, RefreshCw
 } from 'lucide-react';
 
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 const TrackOrderPage = () => {
   const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
@@ -28,7 +30,7 @@ const TrackOrderPage = () => {
     setTrackingData(null);
 
     try {
-      const response = await fetch(`http://localhost:5000/api/tracking/by-phone/${phone}`);
+      const response = await fetch(`${API_BASE}/tracking/by-phone/${phone}`);
       const data = await response.json();
 
       if (data.success) {

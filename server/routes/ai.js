@@ -60,7 +60,7 @@ ${carData.description || 'A premium vehicle from the Volkswagen Group portfolio.
 8. Format prices nicely (e.g., ₹11.09 Lakh instead of ₹1109000).
 `;
 
-    const model = genAI.getGenerativeModel({ model: 'gemini-3-flash-preview' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 
     const chat = model.startChat({
       history: [

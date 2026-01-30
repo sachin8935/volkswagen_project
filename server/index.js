@@ -17,31 +17,19 @@ import aiRouter from './routes/ai.js';
 
 const app = express();
 
-/* =========================
-   ENV & CORE CONFIG
-========================= */
 const PORT = process.env.PORT || 5000;
 
-/* =========================
-   TRUST PROXY (IMPORTANT)
-========================= */
 app.set('trust proxy', true);
 
-/* =========================
-   DATABASE
-========================= */
 connectDB();
 
-/* =========================
-   MIDDLEWARE
-========================= */
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow server-to-server, curl, Postman
+
       if (!origin) return callback(null, true);
 
       const allowedOrigins = [
@@ -59,21 +47,14 @@ app.use(
         return callback(null, true);
       }
 
-      // Safe fallback (tighten later)
       return callback(null, true);
     },
     credentials: true,
   })
 );
 
-/* =========================
-   STATIC FILES
-========================= */
 app.use('/uploads', express.static('uploads'));
 
-/* =========================
-   HEALTH CHECK (NO DB DEPENDENCY)
-========================= */
 app.get('/api/health', (req, res) => {
   res.status(200).json({
     status: 'OK',
@@ -83,9 +64,6 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-/* =========================
-   API ROUTES
-========================= */
 app.use('/api/cars', carsRouter);
 app.use('/api/parts', partsRouter);
 app.use('/api/services', servicesRouter);
@@ -96,24 +74,15 @@ app.use('/api/admin', adminRouter);
 app.use('/api/tracking', trackingRouter);
 app.use('/api/ai', aiRouter);
 
-/* =========================
-   404 HANDLER
-========================= */
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
-/* =========================
-   GLOBAL ERROR HANDLER
-========================= */
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: 'Internal Server Error' });
 });
 
-/* =========================
-   SERVER LISTEN (CRITICAL FIX)
-========================= */
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚗 Volkswagen Server running on port ${PORT}`);
 });
